@@ -1,3 +1,5 @@
+import { Button } from "./components/ui/button"
+
 function App() {
 
   return (
@@ -5,6 +7,7 @@ function App() {
       <p>
         Click on the Vite and React logos to learn more
       </p>
+      <Button variant={'secondary'}>Hello</Button>
     </>
   )
 }
