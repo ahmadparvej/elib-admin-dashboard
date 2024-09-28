@@ -16,7 +16,7 @@ export const description =
 export function Register() {
   return (
     <section className="flex justify-center items-center h-screen">
-        <Card className="mx-auto max-w-sm">
+        <Card className="w-full max-w-sm">
         <CardHeader>
             <CardTitle className="text-xl">Sign Up</CardTitle>
             <CardDescription>

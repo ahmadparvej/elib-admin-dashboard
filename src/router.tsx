@@ -5,7 +5,7 @@ import { Register } from "./pages/Register";
 
 export const router = createBrowserRouter([
     {
-        path: '/homepage',
+        path: '/',
         element: <HomePage/>
     },
     {
