@@ -78,7 +78,7 @@ export function Books() {
       <div className="flex items-center">
         <CustomBreadcrumb items={breadcrumbItems} />
       </div>
-      <div className="flex flex-1 items-center justify-center">
+      <div className="flex flex-1 justify-center">
         <main className="grid flex-1 items-start gap-4 sm:px-0 sm:py-0 md:gap-8">
           <Tabs defaultValue="all">
             <div className="flex items-center">
