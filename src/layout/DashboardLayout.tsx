@@ -38,10 +38,14 @@ export const description =
 
 export function DashboardLayout() {
 
-  const token = useTokenStore((state)=> state.token);
+  const { token, setToken } = useTokenStore((state)=> state);
 
   if(!token){
     return <Navigate to={'/auth/login'} replace/>
+  }
+
+  const handleLogout = () => {
+    setToken('');
   }
 
   return (
@@ -222,7 +226,9 @@ export function DashboardLayout() {
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Button variant={'ghost'} size={'sm'} onClick={handleLogout}>Logout</Button>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
