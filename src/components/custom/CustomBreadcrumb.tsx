@@ -2,10 +2,9 @@ import {
   Breadcrumb,
   BreadcrumbEllipsis,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
+  BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import {
   DropdownMenu,
@@ -13,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "react-router-dom";
 
 interface BreadcrumbItemProps {
   label: string;
@@ -42,9 +42,9 @@ export function CustomBreadcrumb({ items }: CustomBreadcrumbProps) {
                     {item.dropdownItems.map((dropdownItem, i) => (
                       <DropdownMenuItem key={i} asChild>
                         {dropdownItem.href ? (
-                          <BreadcrumbLink href={dropdownItem.href}>
+                          <Link to={dropdownItem.href}>
                             {dropdownItem.label}
-                          </BreadcrumbLink>
+                          </Link>
                         ) : (
                           <span>{dropdownItem.label}</span>
                         )}
@@ -54,7 +54,7 @@ export function CustomBreadcrumb({ items }: CustomBreadcrumbProps) {
                 </DropdownMenu>
               </>
             ) : item.href ? (
-              <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
+              <Link to={item.href}>{item.label}</Link>
             ) : (
               <BreadcrumbPage>{item.label}</BreadcrumbPage>
             )}
