@@ -21,6 +21,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getBooks } from "@/http/api";
 import { useQuery } from "@tanstack/react-query";
 import { File, MoreHorizontal, PlusCircle } from "lucide-react";
+import { Link } from 'react-router-dom';
 
 export function Books() {
   const { data, isLoading, isError } = useQuery({
@@ -57,7 +58,7 @@ export function Books() {
   }
 
   // Define the actions for each row
-  const actions = (row: Record<string, any>) => (
+  const actions = () => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button aria-haspopup="true" size="icon" variant="ghost">
@@ -98,10 +99,12 @@ export function Books() {
                   </span>
                 </Button>
                 <Button size="sm" className="h-7 gap-1">
-                  <PlusCircle className="h-3.5 w-3.5" />
-                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Add Book
-                  </span>
+                  <Link to="/dashboard/books/create" className="flex justify-center items-center">
+                    <PlusCircle className="h-3.5 w-3.5 mr-1" />
+                      <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                        Add Book
+                      </span>
+                  </Link>
                 </Button>
               </div>
             </div>
