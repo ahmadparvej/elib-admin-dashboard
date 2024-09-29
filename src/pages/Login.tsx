@@ -14,6 +14,7 @@ import { useRef } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { login } from './../http/api';
 import { useToast } from '@/hooks/use-toast';
+import useTokenStore from "@/store"
 
 export const description =
   "A simple login form with email and password. The submit button says 'Sign in'."
@@ -22,13 +23,15 @@ export function Login() {
 
   const navigate = useNavigate();
   const { toast } = useToast();
+  const setToken = useTokenStore((state)=> state.setToken);
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const mutation = useMutation({
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: (res) => {
+      setToken(res.data.accessToken);
       console.log("login success");
       navigate('/dashboard/home')
     },
