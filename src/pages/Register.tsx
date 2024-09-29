@@ -13,6 +13,7 @@ import { useRef } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { register } from './../http/api';
 import { useToast } from '@/hooks/use-toast';
+import useTokenStore from '@/store';
 
 export const description =
   "A simple register form with email and password. The submit button says 'Sign in'."
@@ -21,6 +22,7 @@ export function Register() {
 
   const navigate = useNavigate();
   const { toast } = useToast();
+  const setToken = useTokenStore((state)=> state.setToken);
 
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -28,7 +30,8 @@ export function Register() {
 
   const mutation = useMutation({
     mutationFn: register,
-    onSuccess: () => {
+    onSuccess: (res) => {
+      setToken(res.data.accessToken);
       console.log("register success");
       navigate('/dashboard/home')
     },
