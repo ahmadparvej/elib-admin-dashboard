@@ -13,6 +13,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useRef } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { login } from './../http/api';
+import { useToast } from '@/hooks/use-toast';
 
 export const description =
   "A simple login form with email and password. The submit button says 'Sign in'."
@@ -20,6 +21,7 @@ export const description =
 export function Login() {
 
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -30,6 +32,13 @@ export function Login() {
       console.log("login success");
       navigate('/dashboard/home')
     },
+    onError: (error: any) => {
+      console.log(error);
+      toast({
+        variant: "destructive",
+        title: error?.response?.data?.message
+      })
+    }
   })
 
   const handleLoginSubmit = () => {
