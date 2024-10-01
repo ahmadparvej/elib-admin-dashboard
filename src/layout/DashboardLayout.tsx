@@ -1,4 +1,4 @@
-import { Link, Navigate, Outlet } from 'react-router-dom';
+import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
 import {
   Bell,
   CircleUser,
@@ -12,7 +12,6 @@ import {
   Users,
 } from "lucide-react"
 
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -33,16 +32,33 @@ import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import useTokenStore from '@/store';
 
+export interface Items{
+  path: string;
+  label: string;
+  icon: React.ReactNode;
+  badge?: string | number;
+  disabled?: boolean
+}
+
 export const description =
   "A products dashboard with a sidebar navigation and a main content area. The dashboard has a header with a search input and a user menu. The sidebar has a logo, navigation links, and a card with a call to action. The main content area shows an empty state with a call to action."
 
 export function DashboardLayout() {
 
+  const location = useLocation();
   const { token, setToken } = useTokenStore((state)=> state);
 
   if(!token){
     return <Navigate to={'/auth/login'} replace/>
   }
+
+  const items:Items[]  = [
+    { path: "/dashboard/home", label: "Dashboard", icon: <Home className="h-4 w-4" /> },
+    { path: "/dashboard/books", label: "Books", icon: <Package className="h-4 w-4" /> },
+    { path: "/dashboard/orders", label: "Orders", icon: <ShoppingCart className="h-4 w-4" />, disabled: true },
+    { path: "/dashboard/customers", label: "Customers", icon: <Users className="h-4 w-4" />, disabled: true },
+    { path: "/dashboard/analytics", label: "Analytics", icon: <LineChart className="h-4 w-4" />, disabled: true },
+  ];
 
   const handleLogout = () => {
     setToken('');
@@ -64,44 +80,40 @@ export function DashboardLayout() {
           </div>
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-              <Link
-                to="/dashboard/home"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <Home className="h-4 w-4" />
-                Dashboard
-              </Link>
-              <Link
-                to="/dashboard/books"
-                className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
-              >
-                <Package className="h-4 w-4" />
-                Books{" "}
-              </Link>
-              <Link
-                to="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <ShoppingCart className="h-4 w-4" />
-                Orders
-                <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                  6
-                </Badge>
-              </Link>
-              <Link
-                to="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <Users className="h-4 w-4" />
-                Customers
-              </Link>
-              <Link
-                to="#"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-              >
-                <LineChart className="h-4 w-4" />
-                Analytics
-              </Link>
+            {items.map((item) => (
+              <>
+              {
+                item.disabled ? 
+                <div key={item.path} className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground cursor-not-allowed">
+                  {item.icon}
+                  <span>{item.label}</span>
+                  {item.badge && (
+                    <span className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent">
+                      {item.badge}
+                    </span>
+                  )}
+                </div>: 
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  aria-disabled={item.disabled}
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+                    location.pathname === item.path
+                      ? "bg-muted text-primary"
+                      : "text-muted-foreground hover:text-primary"
+                  }`}
+                >
+                  {item.icon}
+                  {item.label}
+                  {item.badge && (
+                    <span className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent">
+                      {item.badge}
+                    </span>
+                  )}
+                </Link>
+              }
+              </>
+            ))}
             </nav>
           </div>
           <div className="mt-auto p-4">
@@ -137,51 +149,40 @@ export function DashboardLayout() {
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col">
               <nav className="grid gap-2 text-lg font-medium">
-                <Link
-                  to="#"
-                  className="flex items-center gap-2 text-lg font-semibold"
-                >
-                  <Package2 className="h-6 w-6" />
-                  <span className="sr-only">Acme Inc</span>
-                </Link>
-                <Link
-                  to="/dashboard/home"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Home className="h-5 w-5" />
-                  Dashboard
-                </Link>
-                <Link
-                  to="/dashboard/books"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Package className="h-5 w-5" />
-                  Books
-                </Link>
-                <Link
-                  to="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                  Orders
-                  <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                    6
-                  </Badge>
-                </Link>
-                <Link
-                  to="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <Users className="h-5 w-5" />
-                  Customers
-                </Link>
-                <Link
-                  to="#"
-                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-                >
-                  <LineChart className="h-5 w-5" />
-                  Analytics
-                </Link>
+                {items.map((item) => (
+                  <>
+                  {
+                    item.disabled ? 
+                    <div className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground cursor-not-allowed">
+                      {item.icon}
+                      <span>{item.label}</span>
+                      {item.badge && (
+                        <span className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent">
+                          {item.badge}
+                        </span>
+                      )}
+                    </div>: 
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      aria-disabled={item.disabled}
+                      className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
+                        location.pathname === item.path
+                          ? "bg-muted text-primary"
+                          : "text-muted-foreground hover:text-primary"
+                      }`}
+                    >
+                      {item.icon}
+                      {item.label}
+                      {item.badge && (
+                        <span className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent">
+                          {item.badge}
+                        </span>
+                      )}
+                    </Link>
+                  }
+                  </>
+                ))}
               </nav>
               <div className="mt-auto">
                 <Card>
