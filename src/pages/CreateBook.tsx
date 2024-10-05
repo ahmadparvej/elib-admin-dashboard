@@ -15,51 +15,67 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createBook } from "@/http/api";
+import { createBook, editBook } from "@/http/api";
 import { useToast } from "@/hooks/use-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const breadcrumbItems = [
-  {
-    label: "Dashboard",
-    href: "/dashboard/home",
-  },
-  {
-    label: "Books",
-    href: "/dashboard/books",
-  },
-  {
-    label: "Add Book",
-    href: "/dashboard/books/create",
-  },
-];
-
-const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "title must be at least 2 characters.",
-  }),
-  genre: z.string().min(2, {
-    message: "genre must be at least 2 characters.",
-  }),
-  description: z.string().min(2, {
-    message: "description must be at least 2 characters.",
-  }),
-  pdf: z.instanceof(FileList).refine(file => file.length == 1, "pdf is required"),
-  coverImage: z.instanceof(FileList).refine(file => file.length == 1, "cover image is required")
-})
 
 export const CreateBook = () => {
-
+  
+  const location = useLocation();
+  const bookToEdit = location?.state?.row; // Access book data passed from Books.tsx
   const { toast } = useToast();
   const navigate = useNavigate();
+  
+  const editPage = location.pathname.includes('edit');
+
+  const formSchema = z.object({
+    title: z.string().min(2, {
+      message: "title must be at least 2 characters.",
+    }),
+    genre: z.string().min(2, {
+      message: "genre must be at least 2 characters.",
+    }),
+    description: z.string().min(2, {
+      message: "description must be at least 2 characters.",
+    }),
+    pdf: editPage
+        ? z.instanceof(FileList).optional() // Optional in edit mode
+        : z.instanceof(FileList).refine(file => file.length === 1, "PDF is required"), // Required in create mode
+      coverImage: editPage
+        ? z.instanceof(FileList).optional() // Optional in edit mode
+        : z.instanceof(FileList).refine(file => file.length === 1, "Cover image is required"), // Required in create mode
+  })
+
+  console.log(location, bookToEdit?._id);
+  
+  const breadcrumbItems = [
+    {
+      label: "Dashboard",
+      href: "/dashboard/home",
+    },
+    {
+      label: "Books",
+      href: "/dashboard/books",
+    },
+    {
+      label: editPage ? "Edit": "Add Book"
+    },
+  ];
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      genre: "",
-      description: ""
-    },
+    defaultValues: editPage
+    ? {
+        title: bookToEdit.title,
+        genre: bookToEdit.genre,
+        description: bookToEdit.description,
+      }
+    : {
+        title: "",
+        genre: "",
+        description: "",
+    }
   })
 
   const coverImageRef = form.register('coverImage');
@@ -70,23 +86,27 @@ export const CreateBook = () => {
     formData.append('title', values.title);
     formData.append('genre', values.genre);
     formData.append('description', values.description);
+
+    if(values?.coverImage && values?.coverImage[0])
     formData.append('coverImage', values.coverImage[0]);
+
+    if(values?.pdf && values?.pdf[0])
     formData.append('file', values.pdf[0]);
 
-    mutation.mutate(formData);
+    mutation.mutate({formData, bookId: bookToEdit?._id});
   }
 
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: createBook,
+    mutationFn: editPage? editBook: createBook,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['Books']
       });
       toast({
         variant: 'default',
-        title: 'Book Created Successfully'
+        title: 'Book Saved Successfully'
       });
       navigate('/dashboard/books')
     },
@@ -108,12 +128,14 @@ export const CreateBook = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
             <div className="flex items-center gap-4">
-              <Button variant="outline" size="icon" className="h-7 w-7">
-                <ChevronLeft className="h-4 w-4" />
-                <span className="sr-only">Back</span>
-              </Button>
+              <Link to="/dashboard/books">
+                <Button variant="outline" size="icon" className="h-7 w-7">
+                  <ChevronLeft className="h-4 w-4" />
+                  <span className="sr-only">Back</span>
+                </Button>
+              </Link>
               <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                Pro Controller
+                { editPage ? bookToEdit.title : 'Create a new book'}
               </h1>
               {/* <Badge variant="outline" className="ml-auto sm:ml-0">
                 In stock
@@ -133,7 +155,7 @@ export const CreateBook = () => {
                   <CardHeader>
                     <CardTitle>Books Details</CardTitle>
                     <CardDescription>
-                      Fill out the form below to create a new book
+                      Fill out the form below to create a book
                     </CardDescription>
                   </CardHeader>
                   <CardContent>

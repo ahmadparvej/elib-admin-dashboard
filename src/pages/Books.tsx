@@ -1,4 +1,3 @@
-// Books.tsx
 import { CustomBreadcrumb } from "@/components/custom/CustomBreadcrumb";
 import { CustomTable } from "@/components/custom/CustomTable"; // Import the new CustomTable component
 import { Button } from "@/components/ui/button";
@@ -10,20 +9,32 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getBooks } from "@/http/api";
-import { useQuery } from "@tanstack/react-query";
-import { File, MoreHorizontal, PlusCircle } from "lucide-react";
-import { Link } from 'react-router-dom';
+import { useToast } from "@/hooks/use-toast";
+import { deleteBook, getBooks } from "@/http/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { File, PlusCircle, PencilLine, Trash2 } from "lucide-react";
+import { Link, useNavigate } from 'react-router-dom';
 
 export function Books() {
+
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  const mutation = useMutation({
+    mutationFn: deleteBook,
+    onSuccess: ()=> {
+      queryClient.invalidateQueries({
+        queryKey: ['Books']
+      });
+      toast({
+        variant: 'default',
+        title: 'Book Deleted Successfully'
+      });
+    }
+  });
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ["Books"],
     queryFn: getBooks,
@@ -57,21 +68,36 @@ export function Books() {
     return <div>Error fetching data...</div>;
   }
 
+  // Define edit and delete handlers
+  const handleEdit = (row: any) => {
+    console.log("Edit clicked for:", row);
+    navigate("/dashboard/books/edit", { state: { row } })
+  };
+
+  const handleDelete = (row: any) => {
+    mutation.mutate(row._id);
+  };
+
   // Define the actions for each row
-  const actions = () => (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button aria-haspopup="true" size="icon" variant="ghost">
-          <MoreHorizontal className="h-4 w-4" />
-          <span className="sr-only">Toggle menu</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Delete</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+  const actions = (row: any) => (
+    <div className="flex gap-2">
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => handleEdit(row)}
+        aria-label="Edit"
+      >
+        <PencilLine className="h-4 w-4" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => handleDelete(row)}
+        aria-label="Delete"
+      >
+        <Trash2 className="h-4 w-4" />
+      </Button>
+    </div>
   );
 
   return (
