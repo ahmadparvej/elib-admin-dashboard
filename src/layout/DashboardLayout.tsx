@@ -80,11 +80,9 @@ export function DashboardLayout() {
           </div>
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-            {items.map((item) => (
-              <>
-              {
+            {items.map((item, index) => (
                 item.disabled ? 
-                <div key={item.path} className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground cursor-not-allowed">
+                <div key={index} className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground cursor-not-allowed">
                   {item.icon}
                   <span>{item.label}</span>
                   {item.badge && (
@@ -94,7 +92,7 @@ export function DashboardLayout() {
                   )}
                 </div>: 
                 <Link
-                  key={item.path}
+                  key={index}
                   to={item.path}
                   aria-disabled={item.disabled}
                   className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
@@ -111,8 +109,6 @@ export function DashboardLayout() {
                     </span>
                   )}
                 </Link>
-              }
-              </>
             ))}
             </nav>
           </div>
@@ -150,10 +146,8 @@ export function DashboardLayout() {
             <SheetContent side="left" className="flex flex-col">
               <nav className="grid gap-2 text-lg font-medium">
                 {items.map((item) => (
-                  <>
-                  {
                     item.disabled ? 
-                    <div className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground cursor-not-allowed">
+                    <div key={item.path} className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground cursor-not-allowed">
                       {item.icon}
                       <span>{item.label}</span>
                       {item.badge && (
@@ -180,8 +174,6 @@ export function DashboardLayout() {
                         </span>
                       )}
                     </Link>
-                  }
-                  </>
                 ))}
               </nav>
               <div className="mt-auto">
