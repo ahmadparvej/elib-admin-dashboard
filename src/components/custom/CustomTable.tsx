@@ -11,7 +11,7 @@ interface CustomTableProps {
 export function CustomTable({ headers, rows, actions }: CustomTableProps) {
   return (
     <Table className="max-h-96 w-full">
-      <TableHeader>
+      <TableHeader className="bg-muted text-primary">
         <TableRow>
           {headers.map((header, index) => (
             <TableHead key={index}>{header.label}</TableHead>

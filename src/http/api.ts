@@ -26,7 +26,7 @@ export const register = async (data: { name: string, email: string, password: st
     return api.post('/api/users/register', data);
 }
 
-export const getBooks = async () => api.get('/api/books/getAll');
+export const getBooks = async (page: number, limit: number) => api.get(`/api/books/getAll?page=${page}&limit=${limit}`);
 
 export const createBook = async ({ formData }: {formData: FormData}) => api.post('/api/books/create', formData, {
     headers: {

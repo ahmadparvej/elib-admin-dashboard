@@ -15,12 +15,15 @@ import { deleteBook, getBooks } from "@/http/api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { File, PlusCircle, PencilLine, Trash2 } from "lucide-react";
 import { Link, useNavigate } from 'react-router-dom';
+import { CustomPagination } from "@/components/custom/CustomPagination";
+import { useState } from "react";
 
 export function Books() {
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
 
   const mutation = useMutation({
     mutationFn: deleteBook,
@@ -36,8 +39,8 @@ export function Books() {
   });
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["Books"],
-    queryFn: getBooks,
+    queryKey: ["Books", currentPage],
+    queryFn: ()=> getBooks( currentPage, 3),
     staleTime: 10000
   });
 
@@ -100,6 +103,11 @@ export function Books() {
     </div>
   );
 
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage); // Update the current page state
+    // You can also make an API call here to fetch data for the new page
+  };
+
   return (
     <>
       <div className="flex items-center">
@@ -136,7 +144,7 @@ export function Books() {
             </div>
             <TabsContent value="all">
               <Card>
-                <CardHeader>
+                <CardHeader className="flex flex-row gap-4">
                   <CardTitle>Books</CardTitle>
                   <CardDescription>
                     Manage your books and view their sales performance.
@@ -144,12 +152,17 @@ export function Books() {
                 </CardHeader>
                 <CardContent>
                   {/* Pass the API response (data) to the CustomTable component */}
-                  <CustomTable headers={headers} rows={data?.data} actions={actions} />
+                  <CustomTable headers={headers} rows={data?.data.books} actions={actions} />
                 </CardContent>
                 <CardFooter>
                   <div className="text-xs text-muted-foreground">
-                    Showing <strong>1-{data?.data?.length}</strong> of <strong>{data?.data?.length}</strong> books
+                    Showing <strong>1-{data?.data?.books.length}</strong> of <strong>{data?.data?.totalBooks}</strong> books
                   </div>
+                  <CustomPagination 
+                    currentPage={currentPage}
+                    totalPage={data?.data?.totalBooks}
+                    onPageChange={handlePageChange}
+                  />
                 </CardFooter>
               </Card>
             </TabsContent>

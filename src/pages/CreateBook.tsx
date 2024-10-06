@@ -126,7 +126,7 @@ export const CreateBook = () => {
       <main className="grid flex-1 items-start gap-4 py-4 sm:py-0 md:gap-8">
         <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
+          <div className="grid max-w-full flex-1 auto-rows-max gap-4">
             <div className="flex items-center gap-4">
               <Link to="/dashboard/books">
                 <Button variant="outline" size="icon" className="h-7 w-7">
@@ -152,14 +152,14 @@ export const CreateBook = () => {
             <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-3 lg:gap-8">
               <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
                 <Card x-chunk="dashboard-07-chunk-0">
-                  <CardHeader>
+                  <CardHeader className="flex flex-row gap-4">
                     <CardTitle>Books Details</CardTitle>
                     <CardDescription>
                       Fill out the form below to create a book
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid gap-6">
+                    <div className="grid gap-6 mb-2">
                       <FormField
                         control={form.control}
                         name="title"
