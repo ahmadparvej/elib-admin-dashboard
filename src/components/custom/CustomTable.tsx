@@ -10,7 +10,7 @@ interface CustomTableProps {
 
 export function CustomTable({ headers, rows, actions }: CustomTableProps) {
   return (
-    <Table className="max-h-96 w-full">
+    <Table className="max-h-[220px] w-full">
       <TableHeader className="bg-muted text-primary">
         <TableRow>
           {headers.map((header, index) => (
@@ -31,9 +31,9 @@ export function CustomTable({ headers, rows, actions }: CustomTableProps) {
                     <img
                       alt={row['title']}
                       className="aspect-square rounded-md object-cover"
-                      height="64"
+                      height="40"
                       src={row[header.key]}
-                      width="50"
+                      width="40"
                     />
                   ) : (
                     row[header.key]

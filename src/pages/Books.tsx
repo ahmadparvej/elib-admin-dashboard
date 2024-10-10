@@ -143,19 +143,21 @@ export function Books() {
               </div>
             </div>
             <TabsContent value="all">
-              <Card>
-                <CardHeader className="flex flex-row gap-4 px-5 py-5">
-                  <CardTitle>Books</CardTitle>
-                  <CardDescription>
-                    Manage your books and view their sales performance.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="p-5 pt-0">
-                  {/* Pass the API response (data) to the CustomTable component */}
-                  <CustomTable headers={headers} rows={data?.data.books} actions={actions} />
-                </CardContent>
-                <CardFooter>
-                  <div className="text-xs text-muted-foreground">
+              <Card className="h-[380px] flex flex-col justify-between">
+                <div>
+                  <CardHeader className="flex flex-row gap-4 px-5 py-5">
+                    <CardTitle>Books</CardTitle>
+                    <CardDescription>
+                      Manage your books and view their sales performance.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-0 pl-5 pr-5">
+                    {/* Pass the API response (data) to the CustomTable component */}
+                    <CustomTable headers={headers} rows={data?.data.books} actions={actions} />
+                  </CardContent>
+                </div>
+                <CardFooter className="pt-0 pb-5 h-7">
+                  <div className="text-xs text-muted-foreground w-40">
                     Showing <strong>1-{data?.data?.books.length}</strong> of <strong>{data?.data?.totalBooks}</strong> books
                   </div>
                   <CustomPagination 

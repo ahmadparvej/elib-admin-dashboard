@@ -17,14 +17,14 @@ import {
   export function CustomPagination({currentPage, totalPage, onPageChange }: CustomPaginationProps) {
 
     const handlePageClick = (page: number) => {
-        onPageChange(page);
+      onPageChange(page);
     }
 
     return (
-      <Pagination>
+      <Pagination className="w-5/6 p-0">
         <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious onClick={()=> handlePageClick(currentPage-1)}/>
+          <PaginationItem className="cursor-pointer">
+            <PaginationPrevious size={'smaller'} className="text-[12px]" disabled={currentPage == 1} onClick={()=> handlePageClick(currentPage-1)}/>
           </PaginationItem>
             {/* Render individual page links */}
             {Array.from({ length: totalPage }, (_, index) => {
@@ -32,6 +32,8 @@ import {
             return (
                 <PaginationItem key={pageNumber}>
                 <PaginationLink
+                    size={'smaller'}
+                    className="text-[12px]"
                     href="#"
                     isActive={pageNumber === currentPage} // Mark as active if it's the current page
                     onClick={() => handlePageClick(pageNumber)}
@@ -44,8 +46,8 @@ import {
 
             {/* Ellipsis when there are many pages */}
             {totalPage > 5 && <PaginationEllipsis />}
-          <PaginationItem>
-            <PaginationNext onClick={()=> handlePageClick(currentPage+1)} />
+          <PaginationItem className="cursor-pointer">
+            <PaginationNext disabled={currentPage == totalPage} size={'smaller'} className="text-[12px]" onClick={()=> handlePageClick(currentPage+1)} />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
