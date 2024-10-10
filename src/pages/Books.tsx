@@ -144,13 +144,13 @@ export function Books() {
             </div>
             <TabsContent value="all">
               <Card>
-                <CardHeader className="flex flex-row gap-4">
+                <CardHeader className="flex flex-row gap-4 px-5 py-5">
                   <CardTitle>Books</CardTitle>
                   <CardDescription>
                     Manage your books and view their sales performance.
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-5 pt-0">
                   {/* Pass the API response (data) to the CustomTable component */}
                   <CustomTable headers={headers} rows={data?.data.books} actions={actions} />
                 </CardContent>

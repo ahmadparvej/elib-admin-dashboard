@@ -25,7 +25,7 @@ export function CustomTable({ headers, rows, actions }: CustomTableProps) {
           { rows.map((row, rowIndex) => (
             <TableRow key={rowIndex}>
               {headers.map((header, cellIndex) => (
-                <TableCell key={cellIndex}>
+                <TableCell key={cellIndex} className="p-0">
                   {/* Render image for coverImage key, otherwise render text */}
                   {header.key === 'coverImage' ? (
                     <img
@@ -33,7 +33,7 @@ export function CustomTable({ headers, rows, actions }: CustomTableProps) {
                       className="aspect-square rounded-md object-cover"
                       height="64"
                       src={row[header.key]}
-                      width="64"
+                      width="50"
                     />
                   ) : (
                     row[header.key]
