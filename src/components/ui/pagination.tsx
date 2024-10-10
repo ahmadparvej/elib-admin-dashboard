@@ -35,38 +35,45 @@ const PaginationItem = React.forwardRef<
 PaginationItem.displayName = "PaginationItem"
 
 type PaginationLinkProps = {
-  isActive?: boolean
+  isActive?: boolean,
+  disabled?: boolean
 } & Pick<ButtonProps, "size"> &
   React.ComponentProps<"a">
 
-const PaginationLink = ({
-  className,
-  isActive,
-  size = "icon",
-  ...props
-}: PaginationLinkProps) => (
-  <a
-    aria-current={isActive ? "page" : undefined}
-    className={cn(
-      buttonVariants({
-        variant: isActive ? "outline" : "ghost",
-        size,
-      }),
-      className
-    )}
-    {...props}
-  />
-)
-PaginationLink.displayName = "PaginationLink"
+  const PaginationLink = ({
+    className,
+    isActive,
+    size = "icon",
+    disabled = false, // New disabled prop
+    ...props
+  }: PaginationLinkProps) => (
+    <a
+      aria-current={isActive ? "page" : undefined}
+      aria-disabled={disabled} // Add aria-disabled attribute for accessibility
+      className={cn(
+        buttonVariants({
+          variant: isActive ? "outline" : "ghost",
+          size,
+        }),
+        disabled && "cursor-not-allowed opacity-50", // Apply disabled styles
+        className
+      )}
+      onClick={(e) => disabled && e.preventDefault()} // Prevent click if disabled
+      {...props}
+    />
+  )
+  
 
 const PaginationPrevious = ({
   className,
+  disabled = false, // Accept disabled prop
   ...props
 }: React.ComponentProps<typeof PaginationLink>) => (
   <PaginationLink
     aria-label="Go to previous page"
     size="default"
     className={cn("gap-1 pl-2.5", className)}
+    disabled={disabled} // Pass the disabled prop
     {...props}
   >
     <ChevronLeft className="h-4 w-4" />
@@ -77,12 +84,14 @@ PaginationPrevious.displayName = "PaginationPrevious"
 
 const PaginationNext = ({
   className,
+  disabled = false, // Accept disabled prop
   ...props
 }: React.ComponentProps<typeof PaginationLink>) => (
   <PaginationLink
     aria-label="Go to next page"
     size="default"
     className={cn("gap-1 pr-2.5", className)}
+    disabled={disabled} // Pass the disabled prop
     {...props}
   >
     <span>Next</span>
@@ -90,6 +99,7 @@ const PaginationNext = ({
   </PaginationLink>
 )
 PaginationNext.displayName = "PaginationNext"
+
 
 const PaginationEllipsis = ({
   className,
