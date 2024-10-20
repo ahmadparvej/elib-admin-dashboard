@@ -89,6 +89,7 @@ export function Books() {
         size="icon"
         onClick={() => handleEdit(row)}
         aria-label="Edit"
+        tooltip="Edit"
       >
         <PencilLine className="h-4 w-4" />
       </Button>
@@ -97,6 +98,7 @@ export function Books() {
         size="icon"
         onClick={() => handleDelete(row)}
         aria-label="Delete"
+        tooltip="Remove"
       >
         <Trash2 className="h-4 w-4" />
       </Button>
