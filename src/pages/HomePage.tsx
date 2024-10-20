@@ -43,9 +43,9 @@ export function HomePage() {
               <BookOpenText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">$45,231.89</div>
+              <div className="text-2xl font-bold">+57</div>
               <p className="text-xs text-muted-foreground">
-                +20.1% from last month
+                includes all books
               </p>
             </CardContent>
           </Card>
@@ -55,7 +55,7 @@ export function HomePage() {
               <CreditCard className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+12,234</div>
+              <div className="text-2xl font-bold">+234</div>
               <p className="text-xs text-muted-foreground">
                 +19% from last month
               </p>
@@ -81,27 +81,27 @@ export function HomePage() {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+2350</div>
+              <div className="text-2xl font-bold">+99</div>
               <p className="text-xs text-muted-foreground">
-                +180.1% from last month
+                +12.1% from last month
               </p>
             </CardContent>
           </Card>
         </div>
-        <div className="grid gap-4 md:gap-8 lg:grid-cols-4 xl:grid-cols-4">
+        <div className="grid gap-4 md:gap-8 grid-cols-4">
           <Card
-            className="xl:col-span-4" x-chunk="dashboard-01-chunk-4"
+            className="col-span-4" x-chunk="dashboard-01-chunk-4"
           >
             <CardHeader className="flex flex-row items-center">
               <div className="grid gap-2">
-                <CardTitle>Transactions</CardTitle>
+                <CardTitle>Downloads</CardTitle>
                 <CardDescription>
-                  Recent transactions from your store.
+                  Recent downloads from your store.
                 </CardDescription>
               </div>
               <Button asChild size="sm" className="ml-auto gap-1">
-                <Link to="#">
-                  View All
+                <Link to="/dashboard/books">
+                  View Books
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </Button>
