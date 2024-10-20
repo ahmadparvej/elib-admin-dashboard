@@ -2,7 +2,7 @@ import axios from 'axios';
 import useTokenStore from '@/store';
 
 const api = axios.create({
-    baseURL: 'http://localhost:4000',
+    baseURL: import.meta.env.VITE_PUBLIC_BACKEND_BASE_URL,
     headers: {
         'Content-Type': 'application/json'
     }
